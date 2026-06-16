@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import WorkoutCheckIn from '../components/WorkoutCheckIn';
 import AICoach from '../components/AICoach';
-
 import { doc, getDoc } from 'firebase/firestore';
 import { db, auth } from '../services/firebase';
 
@@ -12,19 +11,19 @@ export default function Dashboard({ user, onLogout }) {
 
   function completeWorkout(status) {
     if (status === 'completed') {
-      setCompletedWorkouts((value) => value + 1);
-      setStreak((value) => value + 1);
+      setCompletedWorkouts((v) => v + 1);
+      setStreak((v) => v + 1);
     }
   }
 
   useEffect(() => {
     const fetchToday = async () => {
-      const user = auth.currentUser;
-      if (!user) return;
+      const currentUser = auth.currentUser;
+      if (!currentUser) return;
 
       const today = new Date().toISOString().split('T')[0];
 
-      const ref = doc(db, "users", user.uid, "workouts", today);
+      const ref = doc(db, "users", currentUser.uid, "workouts", today);
       const snap = await getDoc(ref);
 
       if (snap.exists()) {
@@ -45,7 +44,10 @@ export default function Dashboard({ user, onLogout }) {
           <h1>Welcome back</h1>
           <p>{user?.email}</p>
         </div>
-        <button className="ghost" onClick={onLogout}>Log out</button>
+
+        <button className="ghost" onClick={onLogout}>
+          Log out
+        </button>
       </header>
 
       {todayStatus ? (
@@ -65,11 +67,13 @@ export default function Dashboard({ user, onLogout }) {
           <h2>{streak}</h2>
           <p>Day streak</p>
         </div>
+
         <div className="stat">
           <span>💪</span>
           <h2>{completedWorkouts}</h2>
           <p>Workouts done</p>
         </div>
+
         <div className="stat">
           <span>🎯</span>
           <h2>Get Fit</h2>

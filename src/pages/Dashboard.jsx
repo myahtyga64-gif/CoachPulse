@@ -1,39 +1,57 @@
-import React, { useEffect, useState } from 'react';
-import WorkoutCheckIn from '../components/WorkoutCheckIn';
-import AICoach from '../components/AICoach';
-import { doc, getDoc } from 'firebase/firestore';
-import { db, auth } from '../services/firebase';
+import React, { useEffect, useState } from "react";
+import WorkoutCheckIn from "../components/WorkoutCheckIn";
+import AICoach from "../components/AICoach";
+
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs
+} from "firebase/firestore";
+
+import { db, auth } from "../services/firebase";
 
 export default function Dashboard({ user, onLogout }) {
   const [streak, setStreak] = useState(0);
   const [completedWorkouts, setCompletedWorkouts] = useState(0);
   const [todayStatus, setTodayStatus] = useState(null);
 
-  function completeWorkout(status) {
-    if (status === 'completed') {
-      setCompletedWorkouts((v) => v + 1);
-      setStreak((v) => v + 1);
+  async function loadWorkoutStats() {
+    const currentUser = auth.currentUser;
+    if (!currentUser) return;
+
+    const today = new Date().toISOString().split("T")[0];
+
+    const todayRef = doc(db, "users", currentUser.uid, "workouts", today);
+    const todaySnap = await getDoc(todayRef);
+
+    if (todaySnap.exists()) {
+      setTodayStatus(todaySnap.data());
+    } else {
+      setTodayStatus(null);
     }
+
+    const workoutsRef = collection(db, "users", currentUser.uid, "workouts");
+    const workoutsSnap = await getDocs(workoutsRef);
+
+    let completed = 0;
+
+    workoutsSnap.forEach((workoutDoc) => {
+      if (workoutDoc.data().status === "completed") {
+        completed += 1;
+      }
+    });
+
+    setCompletedWorkouts(completed);
+    setStreak(completed);
+  }
+
+  function completeWorkout(status) {
+    loadWorkoutStats();
   }
 
   useEffect(() => {
-    const fetchToday = async () => {
-      const currentUser = auth.currentUser;
-      if (!currentUser) return;
-
-      const today = new Date().toISOString().split('T')[0];
-
-      const ref = doc(db, "users", currentUser.uid, "workouts", today);
-      const snap = await getDoc(ref);
-
-      if (snap.exists()) {
-        setTodayStatus(snap.data());
-      } else {
-        setTodayStatus(null);
-      }
-    };
-
-    fetchToday();
+    loadWorkoutStats();
   }, []);
 
   return (
@@ -51,12 +69,12 @@ export default function Dashboard({ user, onLogout }) {
       </header>
 
       {todayStatus ? (
-        <div>
+        <div className="panel">
           <h3>Today's Status:</h3>
           <p>{todayStatus.status}</p>
         </div>
       ) : (
-        <div>
+        <div className="panel">
           <h3>No workout logged today</h3>
         </div>
       )}
@@ -65,13 +83,13 @@ export default function Dashboard({ user, onLogout }) {
         <div className="stat">
           <span>🔥</span>
           <h2>{streak}</h2>
-          <p>Day streak</p>
+          <p>Completed workouts</p>
         </div>
 
         <div className="stat">
           <span>💪</span>
           <h2>{completedWorkouts}</h2>
-          <p>Workouts done</p>
+          <p>Total completed</p>
         </div>
 
         <div className="stat">

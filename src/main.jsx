@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./services/firebase";import React, { useEffect, useState } from "react";
 import { createRoot } from 'react-dom/client';
 import './styles/global.css';
 
@@ -9,7 +10,16 @@ import LoginPage from './pages/LoginPage';
 function App() {
   const [screen, setScreen] = useState('landing');
   const [user, setUser] = useState(null);
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    if (firebaseUser) {
+      setUser({ email: firebaseUser.email });
+      setScreen("dashboard");
+    }
+  });
 
+  return () => unsubscribe();
+}, []);
   if (screen === 'login') {
     return <LoginPage onLogin={(email) => {
       setUser({ email });

@@ -16,6 +16,26 @@ export default function Dashboard({ user, onLogout }) {
   const [completedWorkouts, setCompletedWorkouts] = useState(0);
   const [todayStatus, setTodayStatus] = useState(null);
 
+  function calculateStreak(completedDates) {
+    const completedSet = new Set(completedDates);
+
+    let streakCount = 0;
+    let currentDate = new Date();
+
+    while (true) {
+      const dateKey = currentDate.toISOString().split("T")[0];
+
+      if (completedSet.has(dateKey)) {
+        streakCount += 1;
+        currentDate.setDate(currentDate.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+
+    return streakCount;
+  }
+
   async function loadWorkoutStats() {
     const currentUser = auth.currentUser;
     if (!currentUser) return;
@@ -35,18 +55,22 @@ export default function Dashboard({ user, onLogout }) {
     const workoutsSnap = await getDocs(workoutsRef);
 
     let completed = 0;
+    const completedDates = [];
 
     workoutsSnap.forEach((workoutDoc) => {
-      if (workoutDoc.data().status === "completed") {
+      const data = workoutDoc.data();
+
+      if (data.status === "completed") {
         completed += 1;
+        completedDates.push(data.date);
       }
     });
 
     setCompletedWorkouts(completed);
-    setStreak(completed);
+    setStreak(calculateStreak(completedDates));
   }
 
-  function completeWorkout(status) {
+  function completeWorkout() {
     loadWorkoutStats();
   }
 
@@ -83,7 +107,7 @@ export default function Dashboard({ user, onLogout }) {
         <div className="stat">
           <span>🔥</span>
           <h2>{streak}</h2>
-          <p>Completed workouts</p>
+          <p>Day streak</p>
         </div>
 
         <div className="stat">

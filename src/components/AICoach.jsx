@@ -59,24 +59,24 @@ export default function AICoach({ streak, completedWorkouts, goal }) {
         headers: {
           "Content-Type": "application/json"
         },
-       body: JSON.stringify({
-  message: userText,
-  streak,
-  workouts: completedWorkouts,
-  goal
-})
+        body: JSON.stringify({
+          message: userText,
+          streak,
+          workouts: completedWorkouts,
+          goal
+        })
       });
 
       const data = await res.json();
 
       await saveMessage(
         "coach",
-        data.message || "I’m here with you. Let’s keep going."
+        data.message || data.error || "I’m here with you. Let’s keep going."
       );
     } catch (error) {
       await saveMessage(
         "coach",
-        "Sorry, I couldn’t connect to your coach right now."
+        error.message || "Sorry, I couldn’t connect to your coach right now."
       );
     } finally {
       setLoading(false);

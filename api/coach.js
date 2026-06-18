@@ -26,15 +26,18 @@ module.exports = async function handler(req, res) {
         },
         {
           role: "user",
-          content: `User message: ${message}. Goal: ${goal}. Streak: ${streak}. Completed workouts: ${workouts}. Give coaching advice tailored to that goal.`,
+          content: `User message: ${message}. Goal: ${goal || "Get Fit"}. Streak: ${streak}. Completed workouts: ${workouts}. Give coaching advice tailored to that goal.`,
         },
       ],
     });
 
     return res.status(200).json({
-      message: response.choices[0].message.content,
+      message: response.choices?.[0]?.message?.content || "Keep going — consistency wins.",
     });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    console.error("Coach API error:", error);
+    return res.status(500).json({
+      error: error.message || "Coach API failed",
+    });
   }
 };

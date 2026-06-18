@@ -83,6 +83,11 @@ export default function WeightTracker() {
     loadWeight();
   }
 
+  const chartData = [...history].reverse();
+  const weights = chartData.map((entry) => Number(entry.weight));
+  const maxWeight = Math.max(...weights, 1);
+  const minWeight = Math.min(...weights, maxWeight);
+
   return (
     <section className="panel">
       <h2>Weight Tracking</h2>
@@ -114,6 +119,52 @@ export default function WeightTracker() {
             Progress: {progressSummary.change > 0 ? "+" : ""}
             {progressSummary.change}kg
           </p>
+        </div>
+      )}
+
+      {chartData.length > 1 && (
+        <div style={{ marginTop: "20px" }}>
+          <h3>Progress Chart</h3>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "end",
+              gap: "8px",
+              height: "160px",
+              padding: "12px",
+              background: "#f7f4ff",
+              borderRadius: "16px"
+            }}
+          >
+            {chartData.map((entry) => {
+              const weight = Number(entry.weight);
+              const height =
+                maxWeight === minWeight
+                  ? 80
+                  : 40 + ((weight - minWeight) / (maxWeight - minWeight)) * 100;
+
+              return (
+                <div
+                  key={entry.id}
+                  style={{
+                    flex: 1,
+                    textAlign: "center"
+                  }}
+                >
+                  <div
+                    title={`${entry.date}: ${entry.weight}kg`}
+                    style={{
+                      height: `${height}px`,
+                      background: "#7c3aed",
+                      borderRadius: "999px 999px 0 0"
+                    }}
+                  />
+                  <small>{entry.weight}kg</small>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
 

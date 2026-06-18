@@ -4,10 +4,11 @@ import React, { useEffect, useState } from "react";
 import WorkoutCheckIn from "../components/WorkoutCheckIn";
 import AICoach from "../components/AICoach";
 import GoalSelector from "../components/GoalSelector";
+import WeeklyProgress from "../components/WeeklyProgress";
 
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db, auth } from "../services/firebase";
-import WeeklyProgress from "../components/WeeklyProgress";
+
 export default function Dashboard({ user, onLogout }) {
   const [streak, setStreak] = useState(0);
   const [completedWorkouts, setCompletedWorkouts] = useState(0);
@@ -93,11 +94,18 @@ export default function Dashboard({ user, onLogout }) {
       </header>
 
       <GoalSelector currentGoal={goal} onGoalUpdated={setGoal} />
-<WorkoutPlan
-  goal={goal}
-  streak={streak}
-  completedWorkouts={completedWorkouts}
-/>
+
+      <div className="panel">
+        <h2>TEST WORKOUT PLAN BUTTON AREA</h2>
+        <button>Generate My Weekly Plan</button>
+      </div>
+
+      <WorkoutPlan
+        goal={goal}
+        streak={streak}
+        completedWorkouts={completedWorkouts}
+      />
+
       {todayStatus ? (
         <div className="panel">
           <h3>Today's Status:</h3>
@@ -108,12 +116,15 @@ export default function Dashboard({ user, onLogout }) {
           <h3>No workout logged today</h3>
         </div>
       )}
-<WeeklyProgress completedWorkouts={completedWorkouts} />
-<AchievementBadges
-  streak={streak}
-  completedWorkouts={completedWorkouts}
-  goal={goal}
-/>
+
+      <WeeklyProgress completedWorkouts={completedWorkouts} />
+
+      <AchievementBadges
+        streak={streak}
+        completedWorkouts={completedWorkouts}
+        goal={goal}
+      />
+
       <section className="stats">
         <div className="stat">
           <span>🔥</span>

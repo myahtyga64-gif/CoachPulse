@@ -1,3 +1,4 @@
+import AchievementBadges from "../components/AchievementBadges";
 import React, { useEffect, useState } from "react";
 import WorkoutCheckIn from "../components/WorkoutCheckIn";
 import AICoach from "../components/AICoach";
@@ -6,7 +7,6 @@ import GoalSelector from "../components/GoalSelector";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db, auth } from "../services/firebase";
 import WeeklyProgress from "../components/WeeklyProgress";
-import AchievementBadges from "../components/AchievementBadges";
 export default function Dashboard({ user, onLogout }) {
   const [streak, setStreak] = useState(0);
   const [completedWorkouts, setCompletedWorkouts] = useState(0);

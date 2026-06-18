@@ -5,7 +5,7 @@ import GoalSelector from "../components/GoalSelector";
 
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db, auth } from "../services/firebase";
-
+import WeeklyProgress from "../components/WeeklyProgress";
 export default function Dashboard({ user, onLogout }) {
   const [streak, setStreak] = useState(0);
   const [completedWorkouts, setCompletedWorkouts] = useState(0);
@@ -102,7 +102,7 @@ export default function Dashboard({ user, onLogout }) {
           <h3>No workout logged today</h3>
         </div>
       )}
-
+<WeeklyProgress completedWorkouts={completedWorkouts} />
       <section className="stats">
         <div className="stat">
           <span>🔥</span>

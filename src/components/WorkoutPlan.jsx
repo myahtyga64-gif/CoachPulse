@@ -1,8 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { db, auth } from "../services/firebase";
 
 export default function WorkoutPlan({ goal, streak, completedWorkouts }) {
   const [plan, setPlan] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function loadSavedPlan() {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const planRef = doc(db, "users", user.uid, "plans", "weeklyPlan");
+      const planSnap = await getDoc(planRef);
+
+      if (planSnap.exists()) {
+        setPlan(planSnap.data().plan || "");
+      }
+    }
+
+    loadSavedPlan();
+  }, []);
+
+  async function savePlan(newPlan) {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    await setDoc(doc(db, "users", user.uid, "plans", "weeklyPlan"), {
+      plan: newPlan,
+      goal,
+      createdAt: serverTimestamp()
+    });
+  }
 
   async function generatePlan() {
     setLoading(true);
@@ -21,7 +50,10 @@ export default function WorkoutPlan({ goal, streak, completedWorkouts }) {
       });
 
       const data = await res.json();
-      setPlan(data.plan || data.error || "Could not generate plan.");
+      const newPlan = data.plan || data.error || "Could not generate plan.";
+
+      setPlan(newPlan);
+      await savePlan(newPlan);
     } catch (error) {
       setPlan("Could not connect to workout planner.");
     } finally {

@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function AchievementBadges({ streak, completedWorkouts, goal }) {
   const [unlockedBadge, setUnlockedBadge] = useState(null);
+  const previousBadgesRef = useRef([]);
 
   const badges = [];
 
@@ -12,16 +13,23 @@ export default function AchievementBadges({ streak, completedWorkouts, goal }) {
   if (goal && goal !== "Get Fit") badges.push("🎯 Goal Setter");
 
   useEffect(() => {
-    if (badges.length > 0) {
-      const latestBadge = badges[badges.length - 1];
-      setUnlockedBadge(latestBadge);
+    const previousBadges = previousBadgesRef.current;
+
+    const newBadge = badges.find((badge) => !previousBadges.includes(badge));
+
+    if (newBadge) {
+      setUnlockedBadge(newBadge);
 
       const timer = setTimeout(() => {
         setUnlockedBadge(null);
       }, 3500);
 
+      previousBadgesRef.current = badges;
+
       return () => clearTimeout(timer);
     }
+
+    previousBadgesRef.current = badges;
   }, [streak, completedWorkouts, goal]);
 
   return (

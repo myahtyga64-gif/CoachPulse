@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from "react";
 import WorkoutCheckIn from "../components/WorkoutCheckIn";
 import AICoach from "../components/AICoach";
+import GoalSelector from "../components/GoalSelector";
 
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs
-} from "firebase/firestore";
-
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db, auth } from "../services/firebase";
 
 export default function Dashboard({ user, onLogout }) {
   const [streak, setStreak] = useState(0);
   const [completedWorkouts, setCompletedWorkouts] = useState(0);
   const [todayStatus, setTodayStatus] = useState(null);
+  const [goal, setGoal] = useState("Get Fit");
 
   function calculateStreak(completedDates) {
     const completedSet = new Set(completedDates);
-
     let streakCount = 0;
     let currentDate = new Date();
 
@@ -40,16 +35,19 @@ export default function Dashboard({ user, onLogout }) {
     const currentUser = auth.currentUser;
     if (!currentUser) return;
 
+    const userRef = doc(db, "users", currentUser.uid);
+    const userSnap = await getDoc(userRef);
+
+    if (userSnap.exists() && userSnap.data().goal) {
+      setGoal(userSnap.data().goal);
+    }
+
     const today = new Date().toISOString().split("T")[0];
 
     const todayRef = doc(db, "users", currentUser.uid, "workouts", today);
     const todaySnap = await getDoc(todayRef);
 
-    if (todaySnap.exists()) {
-      setTodayStatus(todaySnap.data());
-    } else {
-      setTodayStatus(null);
-    }
+    setTodayStatus(todaySnap.exists() ? todaySnap.data() : null);
 
     const workoutsRef = collection(db, "users", currentUser.uid, "workouts");
     const workoutsSnap = await getDocs(workoutsRef);
@@ -92,6 +90,8 @@ export default function Dashboard({ user, onLogout }) {
         </button>
       </header>
 
+      <GoalSelector currentGoal={goal} onGoalUpdated={setGoal} />
+
       {todayStatus ? (
         <div className="panel">
           <h3>Today's Status:</h3>
@@ -118,14 +118,18 @@ export default function Dashboard({ user, onLogout }) {
 
         <div className="stat">
           <span>🎯</span>
-          <h2>Get Fit</h2>
+          <h2>{goal}</h2>
           <p>Current goal</p>
         </div>
       </section>
 
       <section className="layout">
         <WorkoutCheckIn onSubmit={completeWorkout} />
-        <AICoach streak={streak} completedWorkouts={completedWorkouts} />
+        <AICoach
+          streak={streak}
+          completedWorkouts={completedWorkouts}
+          goal={goal}
+        />
       </section>
     </main>
   );

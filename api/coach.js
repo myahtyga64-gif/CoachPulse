@@ -6,7 +6,7 @@ export default async function handler(req, res) {
       return res.status(405).json({ error: "Method not allowed" });
     }
 
-    const { message, streak, workouts } = req.body;
+    const { message, streak, workouts, goal } = req.body;
 
     if (!message) {
       return res.status(400).json({ error: "Message is required" });
@@ -26,8 +26,7 @@ export default async function handler(req, res) {
         },
         {
           role: "user",
-          content: `User message: ${message}. Streak: ${streak}. Completed workouts: ${workouts}.`,
-        },
+          content: `User message: ${message}. Goal: ${goal}. Streak: ${streak}. Completed workouts: ${workouts}. Give coaching advice tailored to that goal.`,
       ],
     });
 

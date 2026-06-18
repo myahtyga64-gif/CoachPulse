@@ -9,7 +9,7 @@ import {
   onSnapshot
 } from "firebase/firestore";
 
-export default function AICoach({ streak, completedWorkouts }) {
+export default function AICoach({ streak, completedWorkouts, goal }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -59,11 +59,12 @@ export default function AICoach({ streak, completedWorkouts }) {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          message: userText,
-          streak,
-          workouts: completedWorkouts
-        })
+       body: JSON.stringify({
+  message: userText,
+  streak,
+  workouts: completedWorkouts,
+  goal
+})
       });
 
       const data = await res.json();

@@ -1,3 +1,4 @@
+import WeightTracker from "../components/WeightTracker";
 import WorkoutPlan from "../components/WorkoutPlan";
 import AchievementBadges from "../components/AchievementBadges";
 import React, { useEffect, useState } from "react";
@@ -94,7 +95,7 @@ export default function Dashboard({ user, onLogout }) {
       </header>
 
       <GoalSelector currentGoal={goal} onGoalUpdated={setGoal} />
-
+<WeightTracker />
      
 
       <WorkoutPlan

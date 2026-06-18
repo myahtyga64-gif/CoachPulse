@@ -10,11 +10,12 @@ import {
   serverTimestamp
 } from "firebase/firestore";
 import { db, auth } from "../services/firebase";
-const [progressSummary, setProgressSummary] = useState(null);
+
 export default function WeightTracker() {
   const [currentWeight, setCurrentWeight] = useState("");
   const [goalWeight, setGoalWeight] = useState("");
   const [history, setHistory] = useState([]);
+  const [progressSummary, setProgressSummary] = useState(null);
   const [savedMessage, setSavedMessage] = useState("");
 
   async function loadWeight() {
@@ -39,18 +40,20 @@ export default function WeightTracker() {
     }));
 
     setHistory(entries);
-  }
-if (entries.length > 0) {
-  const latest = Number(entries[0].weight);
-  const oldest = Number(entries[entries.length - 1].weight);
-  const change = latest - oldest;
 
-  setProgressSummary({
-    starting: oldest,
-    current: latest,
-    change
-  });
-}
+    if (entries.length > 0) {
+      const latest = Number(entries[0].weight);
+      const oldest = Number(entries[entries.length - 1].weight);
+      const change = latest - oldest;
+
+      setProgressSummary({
+        starting: oldest,
+        current: latest,
+        change
+      });
+    }
+  }
+
   useEffect(() => {
     loadWeight();
   }, []);
@@ -59,7 +62,9 @@ if (entries.length > 0) {
     const user = auth.currentUser;
     if (!user) return;
 
-    const today = new Date().toISOString().split("T")[0];
+    const now = new Date();
+    const today = now.toISOString().split("T")[0];
+    const entryId = `${today}-${now.getTime()}`;
 
     await setDoc(doc(db, "users", user.uid, "profile", "weight"), {
       currentWeight,
@@ -67,7 +72,7 @@ if (entries.length > 0) {
       updatedAt: serverTimestamp()
     });
 
-    await setDoc(doc(db, "users", user.uid, "weightHistory", today), {
+    await setDoc(doc(db, "users", user.uid, "weightHistory", entryId), {
       weight: currentWeight,
       goalWeight,
       date: today,
@@ -77,17 +82,7 @@ if (entries.length > 0) {
     setSavedMessage("Weight saved!");
     loadWeight();
   }
-{progressSummary && (
-  <div className="panel">
-    <h3>Weight Progress</h3>
-    <p>Starting weight: {progressSummary.starting}kg</p>
-    <p>Current weight: {progressSummary.current}kg</p>
-    <p>
-      Progress: {progressSummary.change > 0 ? "+" : ""}
-      {progressSummary.change}kg
-    </p>
-  </div>
-)}
+
   return (
     <section className="panel">
       <h2>Weight Tracking</h2>
@@ -109,6 +104,18 @@ if (entries.length > 0) {
       <button onClick={saveWeight}>Save Weight</button>
 
       {savedMessage && <p>{savedMessage}</p>}
+
+      {progressSummary && (
+        <div style={{ marginTop: "16px" }}>
+          <h3>Weight Progress</h3>
+          <p>Starting weight: {progressSummary.starting}kg</p>
+          <p>Current weight: {progressSummary.current}kg</p>
+          <p>
+            Progress: {progressSummary.change > 0 ? "+" : ""}
+            {progressSummary.change}kg
+          </p>
+        </div>
+      )}
 
       <h3>Weight History</h3>
 

@@ -1,3 +1,4 @@
+import WorkoutPlan from "../components/WorkoutPlan";
 import AchievementBadges from "../components/AchievementBadges";
 import React, { useEffect, useState } from "react";
 import WorkoutCheckIn from "../components/WorkoutCheckIn";
@@ -92,7 +93,11 @@ export default function Dashboard({ user, onLogout }) {
       </header>
 
       <GoalSelector currentGoal={goal} onGoalUpdated={setGoal} />
-
+<WorkoutPlan
+  goal={goal}
+  streak={streak}
+  completedWorkouts={completedWorkouts}
+/>
       {todayStatus ? (
         <div className="panel">
           <h3>Today's Status:</h3>

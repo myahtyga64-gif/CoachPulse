@@ -10,7 +10,7 @@ import {
   serverTimestamp
 } from "firebase/firestore";
 import { db, auth } from "../services/firebase";
-
+const [progressSummary, setProgressSummary] = useState(null);
 export default function WeightTracker() {
   const [currentWeight, setCurrentWeight] = useState("");
   const [goalWeight, setGoalWeight] = useState("");
@@ -40,7 +40,17 @@ export default function WeightTracker() {
 
     setHistory(entries);
   }
+if (entries.length > 0) {
+  const latest = Number(entries[0].weight);
+  const oldest = Number(entries[entries.length - 1].weight);
+  const change = latest - oldest;
 
+  setProgressSummary({
+    starting: oldest,
+    current: latest,
+    change
+  });
+}
   useEffect(() => {
     loadWeight();
   }, []);
@@ -67,7 +77,17 @@ export default function WeightTracker() {
     setSavedMessage("Weight saved!");
     loadWeight();
   }
-
+{progressSummary && (
+  <div className="panel">
+    <h3>Weight Progress</h3>
+    <p>Starting weight: {progressSummary.starting}kg</p>
+    <p>Current weight: {progressSummary.current}kg</p>
+    <p>
+      Progress: {progressSummary.change > 0 ? "+" : ""}
+      {progressSummary.change}kg
+    </p>
+  </div>
+)}
   return (
     <section className="panel">
       <h2>Weight Tracking</h2>

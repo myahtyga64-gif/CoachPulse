@@ -88,6 +88,32 @@ export default function WeightTracker() {
   const maxWeight = Math.max(...weights, 1);
   const minWeight = Math.min(...weights, maxWeight);
 
+  let goalPrediction = null;
+
+  if (chartData.length >= 2 && goalWeight) {
+    const firstWeight = Number(chartData[0].weight);
+    const latestWeight = Number(chartData[chartData.length - 1].weight);
+    const targetWeight = Number(goalWeight);
+
+    const weightLost = firstWeight - latestWeight;
+    const remainingWeight = latestWeight - targetWeight;
+
+    if (weightLost > 0 && remainingWeight > 0) {
+      const weeksTracked = Math.max(chartData.length - 1, 1);
+      const lossPerWeek = weightLost / weeksTracked;
+      const weeksToGoal = Math.ceil(remainingWeight / lossPerWeek);
+
+      const estimatedDate = new Date();
+      estimatedDate.setDate(estimatedDate.getDate() + weeksToGoal * 7);
+
+      goalPrediction = {
+        lossPerWeek: lossPerWeek.toFixed(2),
+        weeksToGoal,
+        date: estimatedDate.toLocaleDateString()
+      };
+    }
+  }
+
   return (
     <section className="panel">
       <h2>Weight Tracking</h2>
@@ -145,13 +171,7 @@ export default function WeightTracker() {
                   : 40 + ((weight - minWeight) / (maxWeight - minWeight)) * 100;
 
               return (
-                <div
-                  key={entry.id}
-                  style={{
-                    flex: 1,
-                    textAlign: "center"
-                  }}
-                >
+                <div key={entry.id} style={{ flex: 1, textAlign: "center" }}>
                   <div
                     title={`${entry.date}: ${entry.weight}kg`}
                     style={{
@@ -165,6 +185,15 @@ export default function WeightTracker() {
               );
             })}
           </div>
+        </div>
+      )}
+
+      {goalPrediction && (
+        <div style={{ marginTop: "20px" }}>
+          <h3>Goal Date Prediction</h3>
+          <p>Current pace: {goalPrediction.lossPerWeek}kg/week</p>
+          <p>Estimated time to goal: {goalPrediction.weeksToGoal} weeks</p>
+          <p>Estimated goal date: {goalPrediction.date}</p>
         </div>
       )}
 

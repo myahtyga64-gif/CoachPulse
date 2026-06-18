@@ -95,10 +95,7 @@ export default function Dashboard({ user, onLogout }) {
 
       <GoalSelector currentGoal={goal} onGoalUpdated={setGoal} />
 
-      <div className="panel">
-        <h2>TEST WORKOUT PLAN BUTTON AREA</h2>
-        <button>Generate My Weekly Plan</button>
-      </div>
+     
 
       <WorkoutPlan
         goal={goal}

@@ -206,3 +206,46 @@ h1 {
     flex-direction: column;
   }
 }
+.panel {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+button {
+  background: #7c3aed;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-weight: 700;
+  cursor: pointer;
+  margin: 6px 6px 6px 0;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  margin: 8px 0 12px;
+}
+
+h2,
+h3 {
+  margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  button {
+    width: 100%;
+    margin-right: 0;
+  }
+}

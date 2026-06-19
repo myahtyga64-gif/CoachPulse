@@ -1,3 +1,4 @@
+import DailyCheckIn from "../components/DailyCheckIn";
 import ProgressPhotos from "../components/ProgressPhotos";
 import ProgressAnalysis from "../components/ProgressAnalysis";
 import WeightTracker from "../components/WeightTracker";
@@ -105,7 +106,11 @@ export default function Dashboard({ user, onLogout }) {
   streak={streak}
   completedWorkouts={completedWorkouts}
 />    
-
+<DailyCheckIn
+  streak={streak}
+  completedWorkouts={completedWorkouts}
+  goal={goal}
+/>
       <WorkoutPlan
         goal={goal}
         streak={streak}

@@ -101,17 +101,17 @@ export default function WeightTracker() {
 if (remainingWeight > 0) {
   const weeksTracked = Math.max(chartData.length - 1, 1);
   const lossPerWeek = weightLost > 0 ? weightLost / weeksTracked : 0.5;
+  const weeksToGoal = Math.ceil(remainingWeight / lossPerWeek);
 
-      const estimatedDate = new Date();
-      estimatedDate.setDate(estimatedDate.getDate() + weeksToGoal * 7);
+  const estimatedDate = new Date();
+  estimatedDate.setDate(estimatedDate.getDate() + weeksToGoal * 7);
 
-      goalPrediction = {
-        lossPerWeek: lossPerWeek.toFixed(2),
-        weeksToGoal,
-        date: estimatedDate.toLocaleDateString()
-      };
-    }
-  }
+  goalPrediction = {
+    lossPerWeek: lossPerWeek.toFixed(2),
+    weeksToGoal,
+    date: estimatedDate.toLocaleDateString()
+  };
+}
 
   return (
     <section className="panel">

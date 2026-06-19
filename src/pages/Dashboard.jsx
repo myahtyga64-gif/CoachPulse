@@ -1,3 +1,4 @@
+import ProgressAnalysis from "../components/ProgressAnalysis";
 import WeightTracker from "../components/WeightTracker";
 import WorkoutPlan from "../components/WorkoutPlan";
 import AchievementBadges from "../components/AchievementBadges";
@@ -96,7 +97,12 @@ export default function Dashboard({ user, onLogout }) {
 
       <GoalSelector currentGoal={goal} onGoalUpdated={setGoal} />
 <WeightTracker />
-     
+ <ProgressAnalysis
+  currentWeight={80}
+  goalWeight={70}
+  streak={streak}
+  completedWorkouts={completedWorkouts}
+/>    
 
       <WorkoutPlan
         goal={goal}

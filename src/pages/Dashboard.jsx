@@ -1,3 +1,4 @@
+import WeeklySummary from "../components/WeeklySummary";
 import DailyCheckIn from "../components/DailyCheckIn";
 import ProgressPhotos from "../components/ProgressPhotos";
 import ProgressAnalysis from "../components/ProgressAnalysis";
@@ -129,7 +130,14 @@ export default function Dashboard({ user, onLogout }) {
       )}
 
       <WeeklyProgress completedWorkouts={completedWorkouts} />
-
+<WeeklySummary
+  goal={goal}
+  streak={streak}
+  completedWorkouts={completedWorkouts}
+  currentWeight={80}
+  goalWeight={70}
+  checkIns={[]}
+/>
       <AchievementBadges
         streak={streak}
         completedWorkouts={completedWorkouts}

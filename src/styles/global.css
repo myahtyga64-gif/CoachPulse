@@ -249,3 +249,12 @@ h3 {
     margin-right: 0;
   }
 }
+.dashboard-section {
+  margin: 32px 0 20px;
+}
+
+.dashboard-section > h2 {
+  font-size: 28px;
+  margin-bottom: 16px;
+  color: #171421;
+}

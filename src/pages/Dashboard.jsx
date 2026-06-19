@@ -99,79 +99,101 @@ export default function Dashboard({ user, onLogout }) {
       </header>
 
       <GoalSelector currentGoal={goal} onGoalUpdated={setGoal} />
-<WeightTracker />
-<ProgressPhotos />
- <ProgressAnalysis
-  currentWeight={80}
-  goalWeight={70}
-  streak={streak}
-  completedWorkouts={completedWorkouts}
-/>    
-<DailyCheckIn
-  streak={streak}
-  completedWorkouts={completedWorkouts}
-  goal={goal}
-/>
-      <WorkoutPlan
-        goal={goal}
-        streak={streak}
-        completedWorkouts={completedWorkouts}
-      />
 
-      {todayStatus ? (
-        <div className="panel">
-          <h3>Today's Status:</h3>
-          <p>{todayStatus.status}</p>
-        </div>
-      ) : (
-        <div className="panel">
-          <h3>No workout logged today</h3>
-        </div>
-      )}
+      <div className="dashboard-section">
+        <h2>📈 Progress</h2>
 
-      <WeeklyProgress completedWorkouts={completedWorkouts} />
-<WeeklySummary
-  goal={goal}
-  streak={streak}
-  completedWorkouts={completedWorkouts}
-  currentWeight={80}
-  goalWeight={70}
-  checkIns={[]}
-/>
-      <AchievementBadges
-        streak={streak}
-        completedWorkouts={completedWorkouts}
-        goal={goal}
-      />
+        <WeightTracker />
 
-      <section className="stats">
-        <div className="stat">
-          <span>🔥</span>
-          <h2>{streak}</h2>
-          <p>Day streak</p>
-        </div>
+        <ProgressPhotos />
 
-        <div className="stat">
-          <span>💪</span>
-          <h2>{completedWorkouts}</h2>
-          <p>Total completed</p>
-        </div>
+        <ProgressAnalysis
+          currentWeight={80}
+          goalWeight={70}
+          streak={streak}
+          completedWorkouts={completedWorkouts}
+        />
+      </div>
 
-        <div className="stat">
-          <span>🎯</span>
-          <h2>{goal}</h2>
-          <p>Current goal</p>
-        </div>
-      </section>
+      <div className="dashboard-section">
+        <h2>🏋️ Training</h2>
 
-      <section className="layout">
+        <DailyCheckIn
+          streak={streak}
+          completedWorkouts={completedWorkouts}
+          goal={goal}
+        />
+
+        <WorkoutPlan
+          goal={goal}
+          streak={streak}
+          completedWorkouts={completedWorkouts}
+        />
+
+        {todayStatus ? (
+          <div className="panel">
+            <h3>Today's Status:</h3>
+            <p>{todayStatus.status}</p>
+          </div>
+        ) : (
+          <div className="panel">
+            <h3>No workout logged today</h3>
+          </div>
+        )}
+
+        <WeeklyProgress completedWorkouts={completedWorkouts} />
+
         <WorkoutCheckIn onSubmit={completeWorkout} />
+      </div>
+
+      <div className="dashboard-section">
+        <h2>🤖 Coaching</h2>
+
         <AICoach
           streak={streak}
           completedWorkouts={completedWorkouts}
           goal={goal}
         />
-      </section>
+
+        <WeeklySummary
+          goal={goal}
+          streak={streak}
+          completedWorkouts={completedWorkouts}
+          currentWeight={80}
+          goalWeight={70}
+          checkIns={[]}
+        />
+      </div>
+
+      <div className="dashboard-section">
+        <h2>🏆 Achievements</h2>
+
+        <AchievementBadges
+          streak={streak}
+          completedWorkouts={completedWorkouts}
+          goal={goal}
+        />
+
+        <section className="stats">
+          <div className="stat">
+            <span>🔥</span>
+            <h2>{streak}</h2>
+            <p>Day streak</p>
+          </div>
+
+          <div className="stat">
+            <span>💪</span>
+            <h2>{completedWorkouts}</h2>
+            <p>Total completed</p>
+          </div>
+
+          <div className="stat">
+            <span>🎯</span>
+            <h2>{goal}</h2>
+            <p>Current goal</p>
+          </div>
+        </section>
+      </div>
     </main>
   );
 }

@@ -1,3 +1,4 @@
+import ProgressPhotos from "../components/ProgressPhotos";
 import ProgressAnalysis from "../components/ProgressAnalysis";
 import WeightTracker from "../components/WeightTracker";
 import WorkoutPlan from "../components/WorkoutPlan";
@@ -97,6 +98,7 @@ export default function Dashboard({ user, onLogout }) {
 
       <GoalSelector currentGoal={goal} onGoalUpdated={setGoal} />
 <WeightTracker />
+<ProgressPhotos />
  <ProgressAnalysis
   currentWeight={80}
   goalWeight={70}

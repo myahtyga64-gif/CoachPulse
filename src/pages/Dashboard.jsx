@@ -1,3 +1,4 @@
+import logo from "../assets/coachpulse-logo.png";
 import WeeklySummary from "../components/WeeklySummary";
 import DailyCheckIn from "../components/DailyCheckIn";
 import ProgressPhotos from "../components/ProgressPhotos";
@@ -88,10 +89,15 @@ export default function Dashboard({ user, onLogout }) {
     <main className="page">
       <header className="topbar">
         <div>
-          <p className="badge">Beta MVP</p>
-          <h1>Welcome back</h1>
-          <p>{user?.email}</p>
-        </div>
+  <img
+    src={logo}
+    alt="CoachPulse"
+    style={{ height: "90px", marginBottom: "10px" }}
+  />
+
+  <p className="badge">Beta MVP</p>
+  <p>{user?.email}</p>
+</div>
 
         <button className="ghost" onClick={onLogout}>
           Log out

@@ -95,30 +95,12 @@ export default function Dashboard({ user, onLogout }) {
               marginBottom: "10px"
             }}
           >
-<img
-  src="/coachpulse-logo.png"
-  alt="CoachPulse"
-  style={{
-    width: "900px",
-    maxWidth: "none",
-    height: "auto",
-    display: "block"
-  }}
-/>
+
           </div>
 
-          <p
-            style={{
-              color: "#665f74",
-              fontWeight: 600,
-              marginTop: 0,
-              marginBottom: "12px"
-            }}
-          >
-            Build consistency. Track progress.
-          </p>
+          
 <img
-  src="/coachpulse-logo.png"
+  src="/f"
   alt="CoachPulse"
   style={{
     width: "700px",

@@ -50,7 +50,7 @@ export default function Dashboard({ user, onLogout }) {
       setGoal(userSnap.data().goal);
     }
 
-    const today = new Date().toISOString().split("T")[0]
+    const today = new Date().toISOString().split("T")[0];
 
     const todayRef = doc(db, "users", currentUser.uid, "workouts", today);
     const todaySnap = await getDoc(todayRef);
@@ -88,31 +88,18 @@ export default function Dashboard({ user, onLogout }) {
     <main className="page">
       <header className="topbar">
         <div>
-          <div
+          <img
+            src="/coachpulse-logo.png"
+            alt="CoachPulse"
             style={{
-              width: "900px",
+              width: "700px",
               maxWidth: "100%",
-              marginBottom: "10px"
+              height: "auto",
+              display: "block",
+              marginBottom: "20px"
             }}
-          >
+          />
 
-          </div>
-
-          
-<img
-  src="/f"
-  alt="CoachPulse"
-  style={{
-    width: "700px",
-    maxWidth: "100%",
-    height: "auto",
-    display: "block",
-    marginBottom: "20px"
-  }}
-/>
-
-<p className="badge">Beta MVP</p>
-<p>{user?.email}</p>
           <p className="badge">Beta MVP</p>
           <p>{user?.email}</p>
         </div>

@@ -1,3 +1,8 @@
+<img
+  src="/coachpulse-logo.png"
+  alt="CoachPulse"
+  style={{ height: "90px", marginBottom: "10px" }}
+/>
 import WeeklySummary from "../components/WeeklySummary";
 import DailyCheckIn from "../components/DailyCheckIn";
 import ProgressPhotos from "../components/ProgressPhotos";
